@@ -1,2 +1,121 @@
-# tess
-hanya Tess Saja
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="layanan_admin.my.id — Hubungi Admin lewat WhatsApp">
+  <meta name="author" content="Jeki shyo">
+  <title>layanan_admin.my.id</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+  <style>
+    body{
+      font-family:system-ui,Segoe UI,Roboto,Arial;
+      background:#0f1724;
+      color:#e6eef6;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      margin:0;
+    }
+    .card{
+      background:linear-gradient(180deg,#071024,#0b1220);
+      padding:28px;
+      border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+      text-align:center;
+      max-width:420px;
+      width:100%;
+    }
+    button{
+      background:#09a3b8;
+      border:0;
+      color:#022;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:#9aa4b2;
+    }
+    input{
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:transparent;
+      color:inherit;
+      margin-bottom:10px;
+    }
+    small{color:#9aa4b2}
+    footer{
+      margin-top:16px;
+      font-size:12px;
+      color:#9aa4b2;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Hubungi Admin lewat WhatsApp</h2>
+    <p><small>Masukkan pesan (opsional), lalu tekan Lanjutkan</small></p>
+
+    <input id="message" placeholder="Halo, saya mau tanya..." />
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+      <button id="btn">Lanjutkan</button>
+      <button class="ghost" onclick="copyLink()">Salin Link</button>
+    </div>
+
+    <p style="margin-top:12px" id="hint"><small>Jika gagal, akan dibuka di WhatsApp Web.</small></p>
+
+    <footer>
+      © CREATOR BY JEKI KELAS 12 
+    </footer>
+  </div>
+
+  <script>
+    // === GANTI NOMOR ADMIN ===
+    const ADMIN_NUMBER = '6285282922634'; // format internasional tanpa +
+
+    function getPrefilledMessage(){
+      const txt = document.getElementById('message').value || 'Halo, saya ingin bertanya.';
+      return encodeURIComponent(txt);
+    }
+
+    function openWhatsappApp(number, message){
+      const urlApp = `whatsapp://send?phone=${number}&text=${message}`;
+      const urlWeb = `https://wa.me/${number}?text=${message}`;
+
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = urlApp;
+      document.body.appendChild(iframe);
+
+      setTimeout(()=>{
+        document.body.removeChild(iframe);
+        window.open(urlWeb, '_blank');
+      }, 1200);
+    }
+
+    document.getElementById('btn').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const msg = getPrefilledMessage();
+      openWhatsappApp(ADMIN_NUMBER, msg);
+    });
+
+    function copyLink(){
+      const msg = getPrefilledMessage();
+      const link = `https://wa.me/${ADMIN_NUMBER}?text=${msg}`;
+      navigator.clipboard?.writeText(link).then(()=>{
+        const hint = document.getElementById('hint');
+        hint.textContent = 'Link disalin ke clipboard!';
+        setTimeout(()=> hint.textContent = 'Jika gagal, akan dibuka di WhatsApp Web.', 2000);
+      }).catch(()=> alert('Gagal menyalin. Salin manual: ' + link));
+    }
+  </script>
+</body>
+</html>
